@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import readXlsxFile from 'read-excel-file';
 import { ref } from 'vue';
-import DataTable from '@/components/DataTable.vue';
+import ClaimsTable from '@/components/ClaimsTable.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import { type ProcessedRow, parseExcelData } from '@/utils/parseExcelData';
 
@@ -15,7 +15,7 @@ const handleFileChange = (event: Event) => {
   if (!file) return;
 
   readXlsxFile(file)
-    .then((rows) => {
+    .then(rows => {
       const headersRow = rows[0];
       const correctedHeaders = headersRow.map((header: any, index: number) => {
         if (header === null && index === 1) {
@@ -27,20 +27,18 @@ const handleFileChange = (event: Event) => {
       const processedData = parseExcelData(correctedHeaders, rows);
       data.value = processedData;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error reading file:', error);
     });
 };
 </script>
 
-<template>  
+<template>
   <div class="mb-6">
-    <FileUploader 
-      :handleFileChange="handleFileChange" 
-      :accept="'.xlsx'" />
+    <FileUploader :handleFileChange="handleFileChange" :accept="'.xlsx'" />
   </div>
 
-  <DataTable :headers="headers" :data="data" />  
+  <ClaimsTable :headers="headers" :data="data" v-if="data.length > 0" />
 </template>
 
 <style scoped></style>
