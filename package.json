@@ -8,16 +8,33 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist",
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --ignore-path .gitignore --fix"
   },
   "dependencies": {
+    "@vueuse/core": "^13.9.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "read-excel-file": "^6.0.1",
+    "reka-ui": "^2.5.1",
+    "shadcn-vue": "^2.3.1",
+    "tailwind-merge": "^3.3.1",
     "vue": "^3.5.22",
     "vue-router": "^4.6.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/eslint-config-typescript": "^14.6.0",
     "@vue/tsconfig": "^0.5.1",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.37.0",
+    "eslint-plugin-vue": "^10.5.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.3",
     "vite": "^7.1.7",
     "vue-tsc": "^2.1.10"

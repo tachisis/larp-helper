@@ -52,14 +52,14 @@ export interface ProcessedRow {
  */
 export function parseExcelData(headers: string[], rows: ExcelRow[]): ProcessedRow[] {
   const dataRows = rows.slice(1); // Skip headers
-  
-  return dataRows.map(row => {
+
+  return dataRows.map((row) => {
     const processedRow: ProcessedRow = {};
-    
+
     // Process each column
     headers.forEach((header: string | null, index: number) => {
       const value = row[index];
-      
+
       // Map columns to properties
       switch (header) {
         case 'Имя':
@@ -187,7 +187,7 @@ export function parseExcelData(headers: string[], rows: ExcelRow[]): ProcessedRo
           break;
       }
     });
-    
+
     return processedRow;
   });
 }

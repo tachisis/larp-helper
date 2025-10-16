@@ -2,7 +2,7 @@
 import type { ProcessedRow } from '@/utils/parseExcelData';
 
 interface Props {
-  headers: (string)[];
+  headers: string[];
   data: ProcessedRow[];
 }
 
