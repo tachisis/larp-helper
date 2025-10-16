@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import readXlsxFile from 'read-excel-file';
 import { ref } from 'vue';
-import ClaimsTable from '@/components/ClaimsTable.vue';
+import { ClaimsTable } from '@/components/claims-table';
 import FileUploader from '@/components/FileUploader.vue';
 import { type ProcessedRow, parseExcelData } from '@/utils/parseExcelData';
 
