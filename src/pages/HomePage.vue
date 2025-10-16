@@ -5,7 +5,6 @@ import ClaimsTable from '@/components/ClaimsTable.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import { type ProcessedRow, parseExcelData } from '@/utils/parseExcelData';
 
-const headers = ref<string[]>([]);
 const data = ref<ProcessedRow[]>([]);
 
 const handleFileChange = (event: Event) => {
@@ -23,7 +22,6 @@ const handleFileChange = (event: Event) => {
         }
         return header;
       });
-      headers.value = correctedHeaders;
       const processedData = parseExcelData(correctedHeaders, rows);
       data.value = processedData;
     })
@@ -38,7 +36,7 @@ const handleFileChange = (event: Event) => {
     <FileUploader :handleFileChange="handleFileChange" :accept="'.xlsx'" />
   </div>
 
-  <ClaimsTable :headers="headers" :data="data" v-if="data.length > 0" />
+  <ClaimsTable :data="data" v-if="data.length > 0" />
 </template>
 
 <style scoped></style>

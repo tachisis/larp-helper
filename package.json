@@ -17,6 +17,7 @@
     "@vueuse/core": "^13.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.546.0",
     "read-excel-file": "^6.0.1",
     "reka-ui": "^2.5.1",
     "shadcn-vue": "^2.3.1",
