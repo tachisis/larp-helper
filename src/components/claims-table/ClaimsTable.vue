@@ -24,7 +24,14 @@ const columns = computed((): ColumnDef<ProcessedRow, any>[] =>
       header: config.header,
       accessorFn: (row: ProcessedRow) => row[config.property] || '',
       filterFn:
-        config.property === 'playPreferences' || config.property === 'triggers'
+        config.property === 'playPreferences' ||
+        config.property === 'triggers' ||
+        config.property === 'preferredCharacterGender' ||
+        config.property === 'preferredCharacterRace' ||
+        config.property === 'preferredCharacterClass' ||
+        config.property === 'anthropomorphism' ||
+        config.property === 'preferredPlotTypes' ||
+        config.property === 'readyToLead'
           ? ('multiSelect' as FilterFnOption<ProcessedRow>)
           : undefined,
       meta: {

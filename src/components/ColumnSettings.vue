@@ -30,11 +30,10 @@ const updateColumnVisibility = (property: keyof ProcessedRow, checked: boolean) 
 </script>
 
 <template>
-  <div class="border rounded-lg bg-muted/50 flex-1 flex flex-col min-h-0">
-    <div class="p-4 border-b">
-      <h3 class="text-md font-medium">Настройка колонок</h3>
-    </div>
-    <div class="p-4 flex-1 min-h-0 overflow-y-auto">
+  <div class="border flex-1 flex flex-col min-h-0">
+    <h3 class="text-lg font-heading font-semibold pt-4 pb-2 px-6">Настройка колонок</h3>
+    <p class="text-xs px-6 pb-2">Выберите колонки, которые вы хотите отображать в таблице</p>
+    <div class="py-4 px-6 flex-1 min-h-0 overflow-y-auto">
       <div class="flex flex-col gap-2">
         <label
           v-for="config in columnConfigs"

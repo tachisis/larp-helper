@@ -1,26 +1,20 @@
 <template>
-  <div class="flex flex-col md:flex-row md:items-center gap-2">
-    <label :for="`${config.columnId}-filter`" class="text-sm font-medium min-w-24">{{
-      config.label
-    }}</label>
-
-    <!-- Not equal mode toggle icon -->
-    <button
-      v-if="config.allowNotEqual"
-      @click="isNotEqualMode = !isNotEqualMode"
-      class="flex items-center justify-center w-6 h-6"
-      type="button"
-      :aria-label="
-        isNotEqualMode
-          ? 'Режим «не равно» (нажмите для переключения на «равно»)'
-          : 'Режим «равно» (нажмите для переключения на «не равно»)'
-      "
-      :aria-pressed="isNotEqualMode"
-      role="switch"
-    >
-      <EqualIcon v-if="!isNotEqualMode" class="w-4 h-4 text-gray-600" aria-hidden="true" />
-      <EqualNotIcon v-else class="w-4 h-4 text-gray-600" aria-hidden="true" />
-    </button>
+  <div class="flex flex-col gap-2">
+    <div class="flex items-center gap-2">
+      <label :for="`${config.columnId}-filter`" class="text-sm font-medium"
+        >{{ config.label }}
+      </label>
+      <div v-if="config.allowNotEqual" class="flex items-center gap-2">
+        <Checkbox
+          :id="`not-equal-${config.columnId}`"
+          v-model="isNotEqualMode"
+          class="text-secondary"
+        />
+        <label :for="`not-equal-${config.columnId}`" class="text-sm text-gray-700 cursor-pointer">
+          Исключить
+        </label>
+      </div>
+    </div>
 
     <div class="flex items-center gap-2 w-full">
       <Select :model-value="selectedValues" @update:model-value="handleValueChange" multiple>
@@ -44,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { EqualIcon, EqualNotIcon } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 import {
   Select,
@@ -53,6 +46,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
 import type { ColumnFilterConfig } from './types';
 
 interface Props {
@@ -70,6 +64,13 @@ const emit = defineEmits<Emits>();
 
 const selectedValues = ref<string[]>(props.modelValue);
 const isNotEqualMode = ref(props.config.defaultNotEqual || false);
+
+// Debug: log the initialization
+console.log('ColumnFilter initialized:', {
+  columnId: props.config.columnId,
+  defaultNotEqual: props.config.defaultNotEqual,
+  isNotEqualMode: isNotEqualMode.value,
+});
 
 // Watch for external changes to modelValue
 watch(

@@ -48,12 +48,24 @@ export interface ProcessedRow {
 }
 
 /**
+ * Convert checkbox symbols to text
+ */
+function convertCheckboxSymbols(value: any): string {
+  if (value === '☑️') {
+    return 'да';
+  } else if (value === '☐') {
+    return 'нет';
+  }
+  return value;
+}
+
+/**
  * Parse Excel data to structured format
  */
 export function parseExcelData(headers: string[], rows: ExcelRow[]): ProcessedRow[] {
   const dataRows = rows.slice(1); // Skip headers
 
-  return dataRows.map((row) => {
+  return dataRows.map(row => {
     const processedRow: ProcessedRow = {};
 
     // Process each column
@@ -171,7 +183,7 @@ export function parseExcelData(headers: string[], rows: ExcelRow[]): ProcessedRo
           processedRow.triggers = value;
           break;
         case 'Я готов быть лидером':
-          processedRow.readyToLead = value;
+          processedRow.readyToLead = convertCheckboxSymbols(value);
           break;
         case 'У меня есть идеи сюжета/пожелания/мы о чем-то уже договаривались':
           processedRow.plotIdeas = value;

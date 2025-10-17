@@ -15,6 +15,9 @@ export default {
         heading: ['Montserrat', 'sans-serif'],
         body: ['Open Sans', 'sans-serif'],
       },
+      fontSize: {
+        lg: ['1.125rem', '1.5rem'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

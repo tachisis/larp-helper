@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div id="app-container" class="h-screen flex flex-col">
+  <div id="app-container" class="h-screen flex flex-col min-h-[700px]">
     <header class="py-2 px-6 md:px-4 border-b border-gray-300">
       <nav class="flex items-center justify-center md:justify-start">
         <RouterLink to="/" class="flex items-center gap-2">

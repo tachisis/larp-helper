@@ -79,8 +79,135 @@ const triggersOptions = createOptions([
   'тяжелая болезнь',
 ]);
 
+const preferredCharacterGenderOptions = createOptions([
+  'мужской',
+  'женский',
+  'мне все равно, могу сыграть кого угодно',
+]);
+
+const preferredCharacterRaceOptions = createOptions([
+  'люди',
+  'вуки',
+  'тви’леки',
+  'мандалорцы',
+  'забраки',
+  'каминоанцы',
+  'авторская раса (придумано мастерами)',
+  'другое (указать в поле для идей)',
+  'все равно',
+]);
+
+const preferredCharacterClassOptions = createOptions([
+  'торговец',
+  'гвардеец/стражник',
+  'наемник',
+  'чувствительный к Силе',
+  'пользующийся Силой',
+  'сенатор',
+  'служащий (сенат)',
+  'член криминальной банды',
+  'маргинал (житель нижних уровней, но не обязательно преступник)',
+  'дипломат, посол',
+  'аристократ',
+  'студент',
+  'преподаватель, наставник',
+  'контрабандист',
+  'ученый, исследователь',
+  'медик',
+  'художник, творческие занятия',
+  'пилот',
+  'корпоративный магнат',
+  'член делегации с другой планеты',
+  'все равно',
+  'другое (указать)',
+]);
+
+const anthropomorphismOptions = createOptions([
+  'мне все равно, могу сделать любой образ',
+  'я хочу играть человека или максимально похожую на людей расу',
+]);
+
+const preferredPlotTypesOptions = createOptions([
+  'были врагами, стали друзьями',
+  'были друзьями, стали врагами',
+  'были врагами, стали любовниками',
+  'были любовниками, стали врагами',
+  'вынужденные союзники',
+  'соперничество',
+  'принимающая семья или клан',
+  'семья или клан со строгими требованиями',
+  'любовное треугольник',
+  'потерянная любовь',
+  'запретная любовь',
+  'бывшие, плохо закончились отношения',
+  'ничего личного, только бизнес',
+  'брак по расчету',
+  'семья не по крови, служебное братство',
+  'братья и сестры',
+  'родители и дети / родитель',
+  'родители и дети / ребенок',
+  'развод',
+  'коллеги',
+  'долг жизни',
+  'шантаж / шантажист',
+  'шантаж / жертва',
+  'предательство / предатель',
+  'предательство / преданный',
+  'насилие, абьюз / жертва',
+  'насилие, абьюз / виновник',
+  'измена / изменивший',
+  'измена / кому изменили',
+  'измена / с кем изменили',
+  'одержимость / одержимый',
+  'одержимость / тот, кем одержимы',
+  'служебная / командир или начальник',
+  'служебная / подчиненный',
+  'наставничество / учитель, наставник',
+  'наставничество / ученик, студент',
+  'куртуазные отношения / «рыцарь»',
+  'куртуазные отношения / «дама»',
+  'рабство / раб',
+  'рабство / господин или работорговец',
+  'взаимная зависимость',
+  'другое (указать)',
+]);
+
+const readyToLeadOptions = createOptions(['да', 'нет']);
+
 // Column filter configurations (AND logic - all selected options must be present)
 export const columnFilters: ColumnFilterConfig[] = [
+  {
+    columnId: 'preferredCharacterGender',
+    label: 'Пол',
+    placeholder: 'Выберите пол...',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
+    options: preferredCharacterGenderOptions,
+  },
+  {
+    columnId: 'anthropomorphism',
+    label: 'Антропоморфность',
+    placeholder: 'Выберите антропоморфность...',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
+    options: anthropomorphismOptions,
+  },
+  {
+    columnId: 'preferredCharacterRace',
+    label: 'Раса',
+    placeholder: 'Выберите расу...',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
+    options: preferredCharacterRaceOptions,
+  },
+  {
+    columnId: 'preferredCharacterClass',
+    label: 'Класс',
+    placeholder: 'Выберите класс...',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
+    options: preferredCharacterClassOptions,
+  },
   {
     columnId: 'playPreferences',
     label: 'Хочу играть',
@@ -90,6 +217,14 @@ export const columnFilters: ColumnFilterConfig[] = [
     options: playPreferencesOptions,
   },
   {
+    columnId: 'preferredPlotTypes',
+    label: 'Завязки',
+    placeholder: 'Выберите завязки...',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
+    options: preferredPlotTypesOptions,
+  },
+  {
     columnId: 'triggers',
     label: 'Триггеры',
     placeholder: 'Выберите триггеры...',
@@ -97,5 +232,13 @@ export const columnFilters: ColumnFilterConfig[] = [
     allowNotEqual: true,
     defaultNotEqual: true,
     options: triggersOptions,
+  },
+  {
+    columnId: 'readyToLead',
+    label: 'Лидер',
+    placeholder: 'Выберите лидера...',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
+    options: readyToLeadOptions,
   },
 ];

@@ -40,7 +40,13 @@ const handleFileChange = (event: Event) => {
 <template>
   <Layout>
     <template #sidebar>
-      <FileUploader :handleFileChange="handleFileChange" :accept="'.xlsx'" />
+      <FileUploader
+        :handleFileChange="handleFileChange"
+        :accept="'.xlsx'"
+        class="border"
+        title="Загрузите файл с заявками"
+        description="В разделе «Заявки» нажмите на кнопку «Скачать в Excel» и потом загрузите файл сюда"
+      />
       <ColumnSettings v-model="columnVisibility" />
     </template>
 
