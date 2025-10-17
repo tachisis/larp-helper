@@ -1,4 +1,4 @@
-import type { ColumnFilterConfig } from '@/components/ui/column-filter';
+import type { ColumnFilterConfig } from '@/components/ui/column-filter/types';
 
 // Helper function to create filter options
 const createOptions = (values: string[]) =>
@@ -85,15 +85,17 @@ export const columnFilters: ColumnFilterConfig[] = [
     columnId: 'playPreferences',
     label: 'Хочу играть',
     placeholder: 'Выберите предпочтения...',
-    triggerClass: 'w-[300px]',
+    triggerClass: 'w-full',
+    allowNotEqual: true,
     options: playPreferencesOptions,
   },
   {
     columnId: 'triggers',
     label: 'Триггеры',
     placeholder: 'Выберите триггеры...',
-    triggerClass: 'w-[300px]',
+    triggerClass: 'w-full',
     allowNotEqual: true,
+    defaultNotEqual: true,
     options: triggersOptions,
   },
 ];

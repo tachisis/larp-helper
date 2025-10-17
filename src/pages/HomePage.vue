@@ -3,9 +3,15 @@ import readXlsxFile from 'read-excel-file';
 import { ref } from 'vue';
 import { ClaimsTable } from '@/components/claims-table';
 import FileUploader from '@/components/FileUploader.vue';
+import Layout from '@/components/Layout.vue';
+import ColumnSettings from '@/components/ColumnSettings.vue';
 import { type ProcessedRow, parseExcelData } from '@/utils/parseExcelData';
+import { defaultColumnVisibility } from '@/components/claims-table/columns';
 
 const data = ref<ProcessedRow[]>([]);
+const columnVisibility = ref<Partial<Record<keyof ProcessedRow, boolean>>>({
+  ...defaultColumnVisibility,
+});
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -32,11 +38,19 @@ const handleFileChange = (event: Event) => {
 </script>
 
 <template>
-  <div class="mb-6">
-    <FileUploader :handleFileChange="handleFileChange" :accept="'.xlsx'" />
-  </div>
+  <Layout>
+    <template #sidebar>
+      <FileUploader :handleFileChange="handleFileChange" :accept="'.xlsx'" />
+      <ColumnSettings v-model="columnVisibility" />
+    </template>
 
-  <ClaimsTable :data="data" v-if="data.length > 0" />
+    <template #content>
+      <ClaimsTable :data="data" :column-visibility="columnVisibility" v-if="data.length > 0" />
+      <div v-else class="flex items-center justify-center h-64 text-muted-foreground">
+        <p class="text-center">Загрузите Excel файл для отображения результатов</p>
+      </div>
+    </template>
+  </Layout>
 </template>
 
 <style scoped></style>

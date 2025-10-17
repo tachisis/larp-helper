@@ -1,15 +1,17 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div id="app-container" class="min-h-screen flex flex-col">
-    <nav class="p-4 flex items-center justify-center">
-      <RouterLink to="/" class="flex items-center gap-2">
-        <img src="/logo.svg" alt="LARP Helper" class="w-12 h-12" />
-        <span class="text-2xl font-bold">LARP Helper</span>
-      </RouterLink>
-    </nav>
+  <div id="app-container" class="h-screen flex flex-col">
+    <header class="py-2 px-6 md:px-4 border-b border-gray-300">
+      <nav class="flex items-center justify-center md:justify-start">
+        <RouterLink to="/" class="flex items-center gap-2">
+          <img src="/logo.svg" alt="Логотип в виде оранжевой планеты" class="w-12 h-12" />
+          <span class="text-2xl font-heading font-bold">LARP Helper</span>
+        </RouterLink>
+      </nav>
+    </header>
 
-    <main class="p-4">
+    <main class="py-4 px-6 md:p-4 flex-1 flex flex-col min-h-0">
       <RouterView />
     </main>
   </div>

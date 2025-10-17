@@ -11,12 +11,14 @@ const { handleFileChange, accept = '.xlsx', label } = defineProps<Props>();
 </script>
 
 <template>
-  <div class="flex flex-col max-w-[50%] m-auto items-center gap-2">
-    <p class="text-sm italic">
+  <div
+    class="flex flex-col items-center gap-4 p-6 border-2 border-dashed border-border rounded-lg bg-muted/20"
+  >
+    <p class="text-sm text-muted-foreground text-center">
       В разделе «Заявки» нажмите на кнопку «Скачать в Excel» и потом загрузите файл сюда:
     </p>
-    <label for="file-input" v-if="label">{{ label }}</label>
-    <Input type="file" @change="handleFileChange" :accept="accept" />
+    <label for="file-input" v-if="label" class="text-sm font-medium">{{ label }}</label>
+    <Input type="file" @change="handleFileChange" :accept="accept" class="w-full max-w-sm" />
   </div>
 </template>
 

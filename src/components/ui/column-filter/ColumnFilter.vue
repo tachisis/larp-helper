@@ -1,9 +1,30 @@
 <template>
-  <div class="flex items-center gap-2">
-    <span class="text-sm font-medium">{{ config.label }}:</span>
-    <div class="flex items-center gap-2">
+  <div class="flex flex-col md:flex-row md:items-center gap-2">
+    <label :for="`${config.columnId}-filter`" class="text-sm font-medium min-w-24">{{
+      config.label
+    }}</label>
+
+    <!-- Not equal mode toggle icon -->
+    <button
+      v-if="config.allowNotEqual"
+      @click="isNotEqualMode = !isNotEqualMode"
+      class="flex items-center justify-center w-6 h-6"
+      type="button"
+      :aria-label="
+        isNotEqualMode
+          ? 'Режим «не равно» (нажмите для переключения на «равно»)'
+          : 'Режим «равно» (нажмите для переключения на «не равно»)'
+      "
+      :aria-pressed="isNotEqualMode"
+      role="switch"
+    >
+      <EqualIcon v-if="!isNotEqualMode" class="w-4 h-4 text-gray-600" aria-hidden="true" />
+      <EqualNotIcon v-else class="w-4 h-4 text-gray-600" aria-hidden="true" />
+    </button>
+
+    <div class="flex items-center gap-2 w-full">
       <Select :model-value="selectedValues" @update:model-value="handleValueChange" multiple>
-        <SelectTrigger :class="config.triggerClass || 'w-[300px]'">
+        <SelectTrigger :class="config.triggerClass || 'w-full'" :id="`${config.columnId}-filter`">
           <SelectValue :placeholder="config.placeholder || 'Select options...'" />
         </SelectTrigger>
         <SelectContent
@@ -11,7 +32,7 @@
           align="start"
           :side-offset="4"
           :avoid-collisions="false"
-          class="max-h-[300px] overflow-y-auto"
+          class="max-h-[400px] overflow-y-auto"
         >
           <SelectItem v-for="option in config.options" :key="option.value" :value="option.value">
             {{ option.label }}
@@ -19,23 +40,11 @@
         </SelectContent>
       </Select>
     </div>
-
-    <!-- Not equal mode checkbox -->
-    <div v-if="config.allowNotEqual" class="flex items-center gap-1">
-      <input
-        :id="`not-equal-${config.columnId}`"
-        type="checkbox"
-        v-model="isNotEqualMode"
-        class="rounded border-gray-300"
-      />
-      <label :for="`not-equal-${config.columnId}`" class="text-xs text-muted-foreground">
-        Не равно
-      </label>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { EqualIcon, EqualNotIcon } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 import {
   Select,
@@ -44,21 +53,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-export interface FilterOption {
-  value: string;
-  label: string;
-}
-
-export interface ColumnFilterConfig {
-  columnId: string;
-  label: string;
-  placeholder?: string;
-  triggerClass?: string;
-  options: FilterOption[];
-  filterFn?: (row: any, columnId: string, filterValue: string[]) => boolean;
-  allowNotEqual?: boolean; // Allow "not equal" mode
-}
+import type { ColumnFilterConfig } from './types';
 
 interface Props {
   config: ColumnFilterConfig;
@@ -74,7 +69,7 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const selectedValues = ref<string[]>(props.modelValue);
-const isNotEqualMode = ref(false);
+const isNotEqualMode = ref(props.config.defaultNotEqual || false);
 
 // Watch for external changes to modelValue
 watch(

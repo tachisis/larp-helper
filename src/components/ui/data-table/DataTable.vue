@@ -4,7 +4,8 @@ import { FlexRender, getCoreRowModel, getFilteredRowModel, useVueTable } from '@
 import { ref } from 'vue';
 
 import { Input } from '@/components/ui/input';
-import { ColumnFilter, type ColumnFilterConfig } from '@/components/ui/column-filter';
+import { ColumnFilter } from '@/components/ui/column-filter';
+import type { ColumnFilterConfig } from '@/components/ui/column-filter/types';
 import {
   Table,
   TableBody,
@@ -13,6 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ChevronDownIcon } from 'lucide-vue-next';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -25,6 +29,8 @@ const props = defineProps<DataTableProps<TData, TValue>>();
 const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
 const globalFilter = ref('');
+
+const isFiltersPanelOpen = ref(true);
 
 // Store filter values for each column
 const filterValues = ref<Record<string, string[]>>({});
@@ -47,20 +53,8 @@ const handleFilterChange = (columnId: string, value: string[], isNotEqual?: bool
   columnFilters.value = currentFilters;
 };
 
-// Default filter function for multi-select filters (AND logic)
-const defaultMultiSelectFilterFn = (row: any, columnId: string, filterValue: string[]) => {
-  if (!filterValue.length) return true;
-
-  const cellValue = row.getValue(columnId);
-  if (!cellValue) return false;
-
-  const cellText = String(cellValue).toLowerCase();
-  // All selected filters must be present in the cell text (AND logic)
-  return filterValue.every(filter => cellText.includes(filter.toLowerCase()));
-};
-
-// Custom filter function for triggers with not equal mode support
-const triggersFilterFn = (row: any, columnId: string, filterValue: string[]) => {
+// Universal filter function for multi-select filters with optional not equal mode
+const multiSelectFilterFn = (row: any, columnId: string, filterValue: string[]) => {
   if (!filterValue.length) return true;
 
   const cellValue = row.getValue(columnId);
@@ -103,8 +97,7 @@ const table = useVueTable({
       typeof updaterOrValue === 'function' ? updaterOrValue(globalFilter.value) : updaterOrValue;
   },
   filterFns: {
-    multiSelect: defaultMultiSelectFilterFn,
-    triggers: triggersFilterFn,
+    multiSelect: multiSelectFilterFn,
     ...(props.columnFilters?.reduce(
       (acc, filter) => {
         if (filter.filterFn) {
@@ -130,35 +123,53 @@ const table = useVueTable({
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-    <div class="flex items-center gap-4 py-4 flex-shrink-0">
-      <Input
-        :model-value="table.getState().globalFilter ?? ''"
-        placeholder="Search across all columns..."
-        class="max-w-sm"
-        @update:model-value="table.setGlobalFilter($event)"
-      />
+  <div class="flex flex-col flex-1 min-h-0">
+    <Collapsible
+      v-model:open="isFiltersPanelOpen"
+      class="border rounded-lg bg-muted/50 flex-shrink-0"
+    >
+      <CollapsibleTrigger as-child>
+        <Button variant="ghost" class="w-full justify-between p-4 h-auto">
+          <span class="text-md font-medium">Фильтры</span>
+          <ChevronDownIcon
+            :class="['h-4 w-4 transition-transform', isFiltersPanelOpen ? 'rotate-180' : '']"
+            aria-hidden="true"
+          />
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent class="px-4 pb-4">
+        <div class="flex flex-col gap-4">
+          <ColumnFilter
+            v-for="filterConfig in props.columnFilters"
+            :key="filterConfig.columnId"
+            :config="filterConfig"
+            :model-value="filterValues[filterConfig.columnId] || []"
+            @filter-change="handleFilterChange"
+          />
+          <div class="flex items-center gap-4">
+            <label for="globalFilter" class="text-sm font-medium min-w-24 mr-6">Поиск</label>
+            <Input
+              id="globalFilter"
+              :model-value="table.getState().globalFilter ?? ''"
+              placeholder="Введите текст для поиска..."
+              class="w-full"
+              @update:model-value="table.setGlobalFilter($event)"
+            />
+          </div>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
 
-      <!-- Dynamic column filters -->
-      <ColumnFilter
-        v-for="filterConfig in props.columnFilters"
-        :key="filterConfig.columnId"
-        :config="filterConfig"
-        :model-value="filterValues[filterConfig.columnId] || []"
-        @filter-change="handleFilterChange"
-      />
-    </div>
-    <!-- Results count -->
     <div class="text-sm text-muted-foreground py-2">
       <span v-if="table.getFilteredRowModel().rows.length === props.data.length">
-        Всего строк: {{ props.data.length }}
+        Всего заявок: {{ props.data.length }}
       </span>
       <span v-else>
-        Найдено строк: {{ table.getFilteredRowModel().rows.length }} из {{ props.data.length }}
+        Найдено заявок: {{ table.getFilteredRowModel().rows.length }} из {{ props.data.length }}
       </span>
     </div>
 
-    <div class="rounded-md border flex-1">
+    <div class="flex-1 min-h-0 border w-full max-w-full overflow-auto">
       <Table class="table-fixed">
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
