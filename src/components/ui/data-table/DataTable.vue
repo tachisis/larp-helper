@@ -180,7 +180,7 @@ const table = useVueTable({
                 (header.column.columnDef.meta as any)?.className
               "
               :title="header.column.columnDef.header"
-              class="sticky top-0 z-10 bg-background"
+              class="sticky top-0 z-10 bg-muted"
             >
               <FlexRender
                 v-if="!header.isPlaceholder"
