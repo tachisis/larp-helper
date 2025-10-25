@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TData, TValue">
 import type { ColumnDef, ColumnFiltersState, VisibilityState } from '@tanstack/vue-table';
 import { FlexRender, getCoreRowModel, getFilteredRowModel, useVueTable } from '@tanstack/vue-table';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 import { Input } from '@/components/ui/input';
 import { ColumnFilter } from '@/components/ui/column-filter';
@@ -40,6 +40,37 @@ const notEqualModes = ref<Record<string, boolean>>({});
 
 // Store AND/OR mode for each column
 const andModes = ref<Record<string, boolean>>({});
+
+// Check if any filters are active
+const hasActiveFilters = computed(() => {
+  const hasColumnFilters = Object.keys(filterValues.value).some(key => 
+    filterValues.value[key] && filterValues.value[key].length > 0
+  );
+  const hasGlobalFilter = globalFilter.value && globalFilter.value.trim() !== '';
+  return hasColumnFilters || hasGlobalFilter;
+});
+
+// Reset all filters function
+const resetAllFilters = () => {
+  // Clear all filter values
+  filterValues.value = {};
+  
+  // Clear all not equal modes
+  notEqualModes.value = {};
+  
+  // Clear all AND/OR modes
+  andModes.value = {};
+  
+  // Clear column filters
+  columnFilters.value = [];
+  
+  // Clear global filter
+  globalFilter.value = '';
+  
+  // Reset table filters
+  table.setColumnFilters([]);
+  table.setGlobalFilter('');
+};
 
 // Handle filter changes from ColumnFilter components
 const handleFilterChange = (columnId: string, value: string[], isNotEqual?: boolean, isAndMode?: boolean) => {
@@ -140,7 +171,18 @@ const table = useVueTable({
     <Collapsible v-model:open="isFiltersPanelOpen" class="border bg-muted/40 flex-shrink-0">
       <CollapsibleTrigger as-child>
         <Button variant="ghost" class="w-full justify-between p-4 h-auto">
-          <h3 class="text-lg font-heading font-semibold">Фильтры</h3>
+          <div class="flex items-center gap-3">
+            <h3 class="text-lg font-heading font-semibold">Фильтры</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              :disabled="!hasActiveFilters"
+              @click.stop="resetAllFilters"
+              class="text-xs"
+            >
+              Сбросить все
+            </Button>
+          </div>
           <ChevronDownIcon
             :class="['h-4 w-4 transition-transform', isFiltersPanelOpen ? 'rotate-180' : '']"
             aria-hidden="true"

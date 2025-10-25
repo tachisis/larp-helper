@@ -45,6 +45,7 @@ const playPreferencesOptions = createOptions([
   'бунтарство и вызов традициям',
   'радикализм',
   'другое (указать)',
+  'готов сыграть что угодно'
 ]);
 
 // Triggers filter options
@@ -77,6 +78,7 @@ const triggersOptions = createOptions([
   'измена',
   'похищение',
   'тяжелая болезнь',
+  'триггеров нет, готов на все!'
 ]);
 
 const preferredCharacterGenderOptions = createOptions([
@@ -170,6 +172,7 @@ const preferredPlotTypesOptions = createOptions([
   'рабство / господин или работорговец',
   'взаимная зависимость',
   'другое (указать)',
+  'готов сыграть что угодно'
 ]);
 
 const readyToLeadOptions = createOptions(['да', 'нет']);
