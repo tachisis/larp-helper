@@ -14,6 +14,16 @@
           Исключить
         </label>
       </div>
+      <div v-if="config.allowAndOrToggle" class="flex items-center gap-2">
+        <Checkbox
+          :id="`and-mode-${config.columnId}`"
+          v-model="isAndMode"
+          class="text-secondary"
+        />
+        <label :for="`and-mode-${config.columnId}`" class="text-sm text-gray-700 cursor-pointer">
+          Все выбранные
+        </label>
+      </div>
     </div>
 
     <div class="flex items-center gap-2 w-full">
@@ -56,7 +66,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: string[]): void;
-  (e: 'filterChange', columnId: string, value: string[], isNotEqual?: boolean): void;
+  (e: 'filterChange', columnId: string, value: string[], isNotEqual?: boolean, isAndMode?: boolean): void;
 }
 
 const props = defineProps<Props>();
@@ -64,6 +74,7 @@ const emit = defineEmits<Emits>();
 
 const selectedValues = ref<string[]>(props.modelValue);
 const isNotEqualMode = ref(props.config.defaultNotEqual || false);
+const isAndMode = ref(props.config.defaultAndMode !== false); // Default to AND mode (true) unless explicitly set to false
 
 // Debug: log the initialization
 console.log('ColumnFilter initialized:', {
@@ -86,14 +97,19 @@ watch(
   selectedValues,
   newValue => {
     emit('update:modelValue', newValue);
-    emit('filterChange', props.config.columnId, newValue, isNotEqualMode.value);
+    emit('filterChange', props.config.columnId, newValue, isNotEqualMode.value, isAndMode.value);
   },
   { deep: true }
 );
 
 // Watch for not equal mode changes
 watch(isNotEqualMode, () => {
-  emit('filterChange', props.config.columnId, selectedValues.value, isNotEqualMode.value);
+  emit('filterChange', props.config.columnId, selectedValues.value, isNotEqualMode.value, isAndMode.value);
+});
+
+// Watch for AND/OR mode changes
+watch(isAndMode, () => {
+  emit('filterChange', props.config.columnId, selectedValues.value, isNotEqualMode.value, isAndMode.value);
 });
 
 const handleValueChange = (value: any) => {

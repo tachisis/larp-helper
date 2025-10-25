@@ -174,7 +174,7 @@ const preferredPlotTypesOptions = createOptions([
 
 const readyToLeadOptions = createOptions(['да', 'нет']);
 
-// Column filter configurations (AND logic - all selected options must be present)
+// Column filter configurations (AND logic by default, with option to switch to OR)
 export const columnFilters: ColumnFilterConfig[] = [
   {
     columnId: 'preferredCharacterGender',
@@ -182,6 +182,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите пол...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: preferredCharacterGenderOptions,
   },
   {
@@ -190,6 +192,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите антропоморфность...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: anthropomorphismOptions,
   },
   {
@@ -198,6 +202,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите расу...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: preferredCharacterRaceOptions,
   },
   {
@@ -206,6 +212,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите класс...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: preferredCharacterClassOptions,
   },
   {
@@ -214,6 +222,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите предпочтения...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: playPreferencesOptions,
   },
   {
@@ -222,6 +232,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите завязки...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: preferredPlotTypesOptions,
   },
   {
@@ -231,6 +243,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     triggerClass: 'w-full',
     allowNotEqual: true,
     defaultNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: triggersOptions,
   },
   {
@@ -239,6 +253,8 @@ export const columnFilters: ColumnFilterConfig[] = [
     placeholder: 'Выберите лидера...',
     triggerClass: 'w-full',
     allowNotEqual: true,
+    allowAndOrToggle: true,
+    defaultAndMode: false, // Default to OR mode
     options: readyToLeadOptions,
   },
 ];

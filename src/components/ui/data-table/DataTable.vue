@@ -38,11 +38,17 @@ const filterValues = ref<Record<string, string[]>>({});
 // Store not equal mode for each column
 const notEqualModes = ref<Record<string, boolean>>({});
 
+// Store AND/OR mode for each column
+const andModes = ref<Record<string, boolean>>({});
+
 // Handle filter changes from ColumnFilter components
-const handleFilterChange = (columnId: string, value: string[], isNotEqual?: boolean) => {
+const handleFilterChange = (columnId: string, value: string[], isNotEqual?: boolean, isAndMode?: boolean) => {
   filterValues.value[columnId] = value;
   if (isNotEqual !== undefined) {
     notEqualModes.value[columnId] = isNotEqual;
+  }
+  if (isAndMode !== undefined) {
+    andModes.value[columnId] = isAndMode;
   }
 
   // Update column filters
@@ -53,7 +59,7 @@ const handleFilterChange = (columnId: string, value: string[], isNotEqual?: bool
   columnFilters.value = currentFilters;
 };
 
-// Universal filter function for multi-select filters with optional not equal mode
+// Universal filter function for multi-select filters with optional not equal mode and AND/OR logic
 const multiSelectFilterFn = (row: any, columnId: string, filterValue: string[]) => {
   if (!filterValue.length) return true;
 
@@ -62,13 +68,20 @@ const multiSelectFilterFn = (row: any, columnId: string, filterValue: string[]) 
 
   const cellText = String(cellValue).toLowerCase();
   const isNotEqual = notEqualModes.value[columnId] || false;
+  const isAndMode = andModes.value[columnId] !== false; // Default to AND mode (OR mode is false)
 
   if (isNotEqual) {
     // NOT EQUAL mode: none of the selected filters should be present
     return !filterValue.some(filter => cellText.includes(filter.toLowerCase()));
   } else {
-    // EQUAL mode: all selected filters must be present (AND logic)
-    return filterValue.every(filter => cellText.includes(filter.toLowerCase()));
+    // EQUAL mode: check based on AND/OR logic
+    if (isAndMode) {
+      // AND logic: all selected filters must be present
+      return filterValue.every(filter => cellText.includes(filter.toLowerCase()));
+    } else {
+      // OR logic: at least one selected filter must be present
+      return filterValue.some(filter => cellText.includes(filter.toLowerCase()));
+    }
   }
 };
 
