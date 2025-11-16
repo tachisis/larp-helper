@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-2">
-    <div class="flex items-center gap-2">
-      <label :for="`${config.columnId}-filter`" class="text-sm font-medium"
+    <div class="flex flex-wrap items-center gap-2">
+      <label :for="`${config.columnId}-filter`" class="text-sm font-medium basis-full"
         >{{ config.label }}
       </label>
       <div v-if="config.allowNotEqual" class="flex items-center gap-2">
@@ -15,11 +15,7 @@
         </label>
       </div>
       <div v-if="config.allowAndOrToggle" class="flex items-center gap-2">
-        <Checkbox
-          :id="`and-mode-${config.columnId}`"
-          v-model="isAndMode"
-          class="text-secondary"
-        />
+        <Checkbox :id="`and-mode-${config.columnId}`" v-model="isAndMode" class="text-secondary" />
         <label :for="`and-mode-${config.columnId}`" class="text-sm text-gray-700 cursor-pointer">
           Все выбранные
         </label>
@@ -66,7 +62,13 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: string[]): void;
-  (e: 'filterChange', columnId: string, value: string[], isNotEqual?: boolean, isAndMode?: boolean): void;
+  (
+    e: 'filterChange',
+    columnId: string,
+    value: string[],
+    isNotEqual?: boolean,
+    isAndMode?: boolean
+  ): void;
 }
 
 const props = defineProps<Props>();
@@ -104,12 +106,24 @@ watch(
 
 // Watch for not equal mode changes
 watch(isNotEqualMode, () => {
-  emit('filterChange', props.config.columnId, selectedValues.value, isNotEqualMode.value, isAndMode.value);
+  emit(
+    'filterChange',
+    props.config.columnId,
+    selectedValues.value,
+    isNotEqualMode.value,
+    isAndMode.value
+  );
 });
 
 // Watch for AND/OR mode changes
 watch(isAndMode, () => {
-  emit('filterChange', props.config.columnId, selectedValues.value, isNotEqualMode.value, isAndMode.value);
+  emit(
+    'filterChange',
+    props.config.columnId,
+    selectedValues.value,
+    isNotEqualMode.value,
+    isAndMode.value
+  );
 });
 
 const handleValueChange = (value: any) => {
