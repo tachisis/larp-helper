@@ -10,16 +10,19 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
+import { createOptions } from '@/lib/utils';
 import {
-  createOptions,
-  PLAY_PREFERENCES,
-  TRIGGERS,
-  PREFERRED_CHARACTER_RACE,
-  PREFERRED_CHARACTER_CLASS,
-  PREFERRED_PLOT_TYPES,
-} from '@/constants/filterOptions';
+  CHARACTER_PLAY_PREFERENCES,
+  CHARACTER_TRIGGERS,
+  CHARACTER_RACES,
+  CHARACTER_CLASSES,
+  CHARACTER_PLOT_TYPES,
+  CHARACTER_GENDERS,
+  CHARACTER_AGES,
+} from '@/constants/characterFormOptions';
 
 interface CharacterFormData {
+  age: string;
   characterName: string;
   characterDescription: string;
   preferredCharacterGender: string;
@@ -44,12 +47,13 @@ const emit = defineEmits<{
 }>();
 
 // Create options for selects
-const genderOptions = createOptions(['Мужской', 'Женский', 'Другое (указать)']);
-const raceOptions = createOptions(PREFERRED_CHARACTER_RACE);
-const classOptions = createOptions(PREFERRED_CHARACTER_CLASS);
-const playPreferencesOptions = createOptions(PLAY_PREFERENCES);
-const plotTypesOptions = createOptions(PREFERRED_PLOT_TYPES);
-const triggersOptions = createOptions(TRIGGERS);
+const genderOptions = createOptions(CHARACTER_GENDERS);
+const raceOptions = createOptions(CHARACTER_RACES);
+const classOptions = createOptions(CHARACTER_CLASSES);
+const playPreferencesOptions = createOptions(CHARACTER_PLAY_PREFERENCES);
+const plotTypesOptions = createOptions(CHARACTER_PLOT_TYPES);
+const triggersOptions = createOptions(CHARACTER_TRIGGERS);
+const agesOptions = createOptions(CHARACTER_AGES);
 
 // Local form state
 const formData = ref<CharacterFormData>({ ...props.modelValue });
@@ -137,61 +141,38 @@ const getLabelByValue = (
 
 // Generate description from form data
 const generateDescription = () => {
-  const parts: string[] = [];
-
-  if (formData.value.characterName) {
-    parts.push(`Имя: ${formData.value.characterName}`);
-  }
-
-  if (formData.value.preferredCharacterGender) {
-    const label = getLabelByValue(genderOptions, formData.value.preferredCharacterGender);
-    parts.push(`Пол: ${label}`);
-  }
-
-  if (formData.value.preferredCharacterRace) {
-    const label = getLabelByValue(raceOptions, formData.value.preferredCharacterRace);
-    parts.push(`Раса: ${label}`);
-  }
-
-  if (formData.value.preferredCharacterClass) {
-    const label = getLabelByValue(classOptions, formData.value.preferredCharacterClass);
-    parts.push(`Класс: ${label}`);
-  }
-
-  if (formData.value.readyToLead) {
-    parts.push(`Лидер: да`);
-  }
-
-  if (formData.value.appearance) {
-    parts.push(`Внешний вид: ${formData.value.appearance}`);
-  }
-
-  if (formData.value.playPreferences && formData.value.playPreferences.length > 0) {
-    const labels = formData.value.playPreferences
-      .map(value => getLabelByValue(playPreferencesOptions, value))
+  const formatValue = (value?: string) => (value && value.trim().length > 0 ? value : '—');
+  const formatSelection = (
+    options: Array<{ value: string; label: string }>,
+    selectedValue?: string
+  ) => {
+    if (!selectedValue) return '—';
+    const label = getLabelByValue(options, selectedValue);
+    return formatValue(label);
+  };
+  const formatList = (options: Array<{ value: string; label: string }>, values?: string[]) => {
+    if (!values || values.length === 0) return '—';
+    const labels = values
+      .map(value => getLabelByValue(options, value))
+      .filter(Boolean)
       .join(', ');
-    parts.push(`Во что играть: ${labels}`);
-  }
+    return formatValue(labels);
+  };
 
-  if (formData.value.preferredPlotTypes && formData.value.preferredPlotTypes.length > 0) {
-    const labels = formData.value.preferredPlotTypes
-      .map(value => getLabelByValue(plotTypesOptions, value))
-      .join(', ');
-    parts.push(`Завязки: ${labels}`);
-  }
-
-  if (formData.value.triggers && formData.value.triggers.length > 0) {
-    const labels = formData.value.triggers
-      .map(value => getLabelByValue(triggersOptions, value))
-      .join(', ');
-    parts.push(`Триггеры: ${labels}`);
-  }
-
-  if (formData.value.plotIdeas) {
-    parts.push(`Идеи: ${formData.value.plotIdeas}`);
-  }
-
-  parts.push(`Общеизвестное описание: ${formData.value.characterDescription}`);
+  const parts: string[] = [
+    `Имя: ${formatValue(formData.value.characterName)}`,
+    `Пол: ${formatSelection(genderOptions, formData.value.preferredCharacterGender)}`,
+    `Раса: ${formatSelection(raceOptions, formData.value.preferredCharacterRace)}`,
+    `Возраст: ${formatSelection(agesOptions, formData.value.age)}`,
+    `Класс: ${formatSelection(classOptions, formData.value.preferredCharacterClass)}`,
+    `Лидер: ${formData.value.readyToLead ? 'да' : 'нет'}`,
+    `Внешний вид: ${formatValue(formData.value.appearance)}`,
+    `Во что играть: ${formatList(playPreferencesOptions, formData.value.playPreferences)}`,
+    `Завязки: ${formatList(plotTypesOptions, formData.value.preferredPlotTypes)}`,
+    `Триггеры: ${formatList(triggersOptions, formData.value.triggers)}`,
+    `Идеи: ${formatValue(formData.value.plotIdeas)}`,
+    `Общеизвестное описание: ${formatValue(formData.value.characterDescription)}`,
+  ];
 
   generatedDescription.value = parts.join('\n');
 
@@ -270,12 +251,21 @@ const generateDescription = () => {
           </Select>
         </div>
 
-        <div class="flex items-center space-x-2 pt-6">
-          <Checkbox
-            :model-value="formData.readyToLead"
-            @update:model-value="val => updateField('readyToLead', val as boolean)"
-          />
-          <label class="text-sm font-medium cursor-pointer">Лидер</label>
+        <div>
+          <label class="block text-sm font-medium mb-2">Возраст</label>
+          <Select
+            :model-value="formData.age"
+            @update:model-value="val => updateField('age', val as string)"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Выберите возраст" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="option in agesOptions" :key="option.value" :value="option.value">
+                {{ option.label }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
@@ -285,6 +275,15 @@ const generateDescription = () => {
             @update:model-value="val => updateField('appearance', val as string)"
             placeholder="Введите внешний вид"
           />
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <Checkbox
+            id="readyToLead"
+            :model-value="formData.readyToLead"
+            @update:model-value="val => updateField('readyToLead', val as boolean)"
+          />
+          <label for="readyToLead" class="text-sm font-medium cursor-pointer">Лидер</label>
         </div>
       </div>
     </div>

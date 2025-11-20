@@ -1,6 +1,5 @@
 import type { ColumnFilterConfig } from '@/components/ui/column-filter/types';
 import {
-  createOptions,
   PLAY_PREFERENCES,
   TRIGGERS,
   PREFERRED_CHARACTER_GENDER,
@@ -10,6 +9,8 @@ import {
   PREFERRED_PLOT_TYPES,
   READY_TO_LEAD,
 } from '@/constants/filterOptions';
+
+import { createOptions } from '@/lib/utils';
 
 // Create filter options from constants
 const playPreferencesOptions = createOptions(PLAY_PREFERENCES);
