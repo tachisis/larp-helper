@@ -101,40 +101,37 @@ export function parseExcelData(headers: string[], rows: ExcelRow[]): ProcessedRo
         case 'Уплачено':
           processedRow.paidAmount = value;
           break;
-        case 'LastModifiedBy':
+        case 'LastModifiedBy.DisplayName':
           processedRow.lastModifiedBy = value;
           break;
-        case 'Ответственный':
+        case 'Ответственный.DisplayName':
           processedRow.responsible = value;
           break;
-        case 'Игрок':
+        case 'FullPlayer':
           processedRow.player = value;
           break;
-        case 'Игрок.SurName':
+        case 'FullPlayer.SurName':
           processedRow.playerSurname = value;
           break;
-        case 'Игрок.FatherName':
+        case 'FullPlayer.FatherName':
           processedRow.playerFatherName = value;
           break;
-        case 'Игрок.BornName':
+        case 'FullPlayer.BornName':
           processedRow.playerBornName = value;
           break;
-        case 'Игрок.Email':
+        case 'FullPlayer.Email':
           processedRow.playerEmail = value;
           break;
-        case 'Игрок.Extra.Vk':
+        case 'ВК':
           processedRow.playerVk = value;
           break;
-        case 'Игрок.Extra.Skype':
-          processedRow.playerSkype = value;
-          break;
-        case 'Игрок.Extra.Telegram':
+        case 'Телеграм':
           processedRow.playerTelegram = value;
           break;
-        case 'Игрок.Extra.Livejournal':
+        case 'FullPlayer.Extra.Livejournal':
           processedRow.playerLivejournal = value;
           break;
-        case 'Игрок.Extra.PhoneNumber':
+        case 'FullPlayer.Extra.PhoneNumber':
           processedRow.playerPhoneNumber = value;
           break;
         case 'Имя персонажа':
