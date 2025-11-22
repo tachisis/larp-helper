@@ -29,14 +29,18 @@ watch(
   newValue => {
     emit('update:modelValue', { ...newValue });
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 
 <template>
   <div class="border flex-1 flex flex-col min-h-0">
-    <h3 class="text-lg font-heading font-semibold pt-4 pb-2 px-6">Настройка колонок</h3>
-    <p class="text-xs px-6 pb-2">Выберите колонки, которые вы хотите отображать в таблице</p>
+    <h3 class="text-lg font-heading font-semibold pt-4 pb-2 px-6">
+      Настройка колонок
+    </h3>
+    <p class="text-xs px-6 pb-2">
+      Выберите колонки, которые вы хотите отображать в таблице
+    </p>
     <div class="py-4 px-6 max-h-[200px] md:max-h-none md:flex-1 md:min-h-0 overflow-y-auto">
       <div class="flex flex-col gap-2">
         <label

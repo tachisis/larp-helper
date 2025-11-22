@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  columnFilters?: ColumnFilterConfig[];
+  filterConfigs?: ColumnFilterConfig[];
 }
 
 const props = defineProps<DataTableProps<TData, TValue>>();
@@ -43,8 +43,8 @@ const andModes = ref<Record<string, boolean>>({});
 
 // Check if any filters are active
 const hasActiveFilters = computed(() => {
-  const hasColumnFilters = Object.keys(filterValues.value).some(key => 
-    filterValues.value[key] && filterValues.value[key].length > 0
+  const hasColumnFilters = Object.keys(filterValues.value).some(
+    key => filterValues.value[key] && filterValues.value[key].length > 0
   );
   const hasGlobalFilter = globalFilter.value && globalFilter.value.trim() !== '';
   return hasColumnFilters || hasGlobalFilter;
@@ -54,26 +54,31 @@ const hasActiveFilters = computed(() => {
 const resetAllFilters = () => {
   // Clear all filter values
   filterValues.value = {};
-  
+
   // Clear all not equal modes
   notEqualModes.value = {};
-  
+
   // Clear all AND/OR modes
   andModes.value = {};
-  
+
   // Clear column filters
   columnFilters.value = [];
-  
+
   // Clear global filter
   globalFilter.value = '';
-  
+
   // Reset table filters
   table.setColumnFilters([]);
   table.setGlobalFilter('');
 };
 
 // Handle filter changes from ColumnFilter components
-const handleFilterChange = (columnId: string, value: string[], isNotEqual?: boolean, isAndMode?: boolean) => {
+const handleFilterChange = (
+  columnId: string,
+  value: string[],
+  isNotEqual?: boolean,
+  isAndMode?: boolean
+) => {
   filterValues.value[columnId] = value;
   if (isNotEqual !== undefined) {
     notEqualModes.value[columnId] = isNotEqual;
@@ -142,7 +147,7 @@ const table = useVueTable({
   },
   filterFns: {
     multiSelect: multiSelectFilterFn,
-    ...(props.columnFilters?.reduce(
+    ...(props.filterConfigs?.reduce(
       (acc, filter) => {
         if (filter.filterFn) {
           acc[filter.columnId] = filter.filterFn;
@@ -177,8 +182,8 @@ const table = useVueTable({
               variant="outline"
               size="sm"
               :disabled="!hasActiveFilters"
-              @click.stop="resetAllFilters"
               class="text-xs"
+              @click.stop="resetAllFilters"
             >
               Сбросить все
             </Button>
@@ -193,7 +198,7 @@ const table = useVueTable({
         <div class="flex flex-col gap-4">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <ColumnFilter
-              v-for="filterConfig in props.columnFilters"
+              v-for="filterConfig in props.filterConfigs"
               :key="filterConfig.columnId"
               :config="filterConfig"
               :model-value="filterValues[filterConfig.columnId] || []"

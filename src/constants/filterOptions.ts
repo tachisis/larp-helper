@@ -83,7 +83,7 @@ export const PREFERRED_CHARACTER_GENDER = [
 export const PREFERRED_CHARACTER_RACE = [
   'люди',
   'вуки',
-  "тви'леки",
+  'тви\'леки',
   'мандалорцы',
   'забраки',
   'каминоанцы',

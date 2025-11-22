@@ -64,7 +64,7 @@ watch(
   newValue => {
     formData.value = { ...newValue };
   },
-  { deep: true }
+  { deep: true },
 );
 
 // Update parent when form changes
@@ -76,7 +76,7 @@ const updateField = <K extends keyof CharacterFormData>(field: K, value: Charact
 // Handle checkbox arrays
 const getCheckboxValue = (
   field: 'playPreferences' | 'preferredPlotTypes' | 'triggers',
-  value: string
+  value: string,
 ) => {
   return (formData.value[field] || []).includes(value);
 };
@@ -84,7 +84,7 @@ const getCheckboxValue = (
 const setCheckboxValue = (
   field: 'playPreferences' | 'preferredPlotTypes' | 'triggers',
   value: string,
-  checked: boolean
+  checked: boolean,
 ) => {
   const currentArray = formData.value[field] || [];
   if (checked) {
@@ -94,7 +94,7 @@ const setCheckboxValue = (
   } else {
     updateField(
       field,
-      currentArray.filter(item => item !== value)
+      currentArray.filter(item => item !== value),
     );
   }
 };
@@ -133,7 +133,7 @@ const copyToClipboard = async () => {
 // Helper function to get label by value
 const getLabelByValue = (
   options: Array<{ value: string; label: string }>,
-  value: string
+  value: string,
 ): string => {
   const option = options.find(opt => opt.value === value);
   return option ? option.label : value;
@@ -144,7 +144,7 @@ const generateDescription = () => {
   const formatValue = (value?: string) => (value && value.trim().length > 0 ? value : '—');
   const formatSelection = (
     options: Array<{ value: string; label: string }>,
-    selectedValue?: string
+    selectedValue?: string,
   ) => {
     if (!selectedValue) return '—';
     const label = getLabelByValue(options, selectedValue);
@@ -186,18 +186,20 @@ const generateDescription = () => {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-6" @submit.prevent="handleSubmit">
     <!-- Character Preferences -->
     <div class="space-y-4 border rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">Основная информация</h2>
+      <h2 class="text-xl font-semibold mb-4">
+        Основная информация
+      </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium mb-2">Имя персонажа</label>
           <Input
             v-model="formData.characterName"
-            @update:model-value="val => updateField('characterName', val as string)"
             placeholder="Введите имя персонажа"
+            @update:model-value="val => updateField('characterName', val as string)"
           />
         </div>
         <div>
@@ -272,8 +274,8 @@ const generateDescription = () => {
           <label class="block text-sm font-medium mb-2">Внешний вид</label>
           <Input
             v-model="formData.appearance"
-            @update:model-value="val => updateField('appearance', val as string)"
             placeholder="Введите внешний вид"
+            @update:model-value="val => updateField('appearance', val as string)"
           />
         </div>
 
@@ -290,7 +292,9 @@ const generateDescription = () => {
 
     <!-- Play Preferences -->
     <div class="space-y-4 border rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">Во что играть</h2>
+      <h2 class="text-xl font-semibold mb-4">
+        Во что играть
+      </h2>
       <div class="max-h-[240px] overflow-y-auto">
         <label
           v-for="option in playPreferencesOptions"
@@ -310,7 +314,9 @@ const generateDescription = () => {
 
     <!-- Plot Types -->
     <div class="space-y-4 border rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">Завязки</h2>
+      <h2 class="text-xl font-semibold mb-4">
+        Завязки
+      </h2>
       <div class="max-h-[240px] overflow-y-auto">
         <label
           v-for="option in plotTypesOptions"
@@ -330,7 +336,9 @@ const generateDescription = () => {
 
     <!-- Triggers -->
     <div class="space-y-4 border rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">Триггеры</h2>
+      <h2 class="text-xl font-semibold mb-4">
+        Триггеры
+      </h2>
       <div class="max-h-[240px] overflow-y-auto">
         <label
           v-for="option in triggersOptions"
@@ -351,14 +359,21 @@ const generateDescription = () => {
 
   <!-- Generate Description Button -->
   <div class="text-center pb-4">
-    <Button type="button" @click="generateDescription">Сгенерировать описание</Button>
+    <Button type="button" @click="generateDescription">
+      Сгенерировать описание
+    </Button>
   </div>
 
   <!-- Generated Description Textarea -->
   <div v-if="generatedDescription" class="space-y-2">
     <div class="flex items-center justify-between">
       <label class="block text-lg font-medium">Сгенерированное описание</label>
-      <Button type="button" variant="outline" size="sm" @click="copyToClipboard">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        @click="copyToClipboard"
+      >
         {{ isCopied ? 'Скопировано!' : 'Копировать' }}
       </Button>
     </div>

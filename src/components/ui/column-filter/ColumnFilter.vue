@@ -1,8 +1,10 @@
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex flex-wrap items-center gap-2">
-      <label :for="`${config.columnId}-filter`" class="text-sm font-medium basis-full"
-        >{{ config.label }}
+      <label
+        :for="`${config.columnId}-filter`"
+        class="text-sm font-medium basis-full"
+      >{{ config.label }}
       </label>
       <div v-if="config.allowNotEqual" class="flex items-center gap-2">
         <Checkbox
@@ -23,8 +25,8 @@
     </div>
 
     <div class="flex items-center gap-2 w-full">
-      <Select :model-value="selectedValues" @update:model-value="handleValueChange" multiple>
-        <SelectTrigger :class="config.triggerClass || 'w-full'" :id="`${config.columnId}-filter`">
+      <Select :model-value="selectedValues" multiple @update:model-value="handleValueChange">
+        <SelectTrigger :id="`${config.columnId}-filter`" :class="config.triggerClass || 'w-full'">
           <SelectValue :placeholder="config.placeholder || 'Select options...'" />
         </SelectTrigger>
         <SelectContent
@@ -91,7 +93,7 @@ watch(
   newValue => {
     selectedValues.value = newValue;
   },
-  { deep: true }
+  { deep: true },
 );
 
 // Watch for internal changes and emit events
@@ -101,7 +103,7 @@ watch(
     emit('update:modelValue', newValue);
     emit('filterChange', props.config.columnId, newValue, isNotEqualMode.value, isAndMode.value);
   },
-  { deep: true }
+  { deep: true },
 );
 
 // Watch for not equal mode changes
@@ -111,7 +113,7 @@ watch(isNotEqualMode, () => {
     props.config.columnId,
     selectedValues.value,
     isNotEqualMode.value,
-    isAndMode.value
+    isAndMode.value,
   );
 });
 
@@ -122,7 +124,7 @@ watch(isAndMode, () => {
     props.config.columnId,
     selectedValues.value,
     isNotEqualMode.value,
-    isAndMode.value
+    isAndMode.value,
   );
 });
 

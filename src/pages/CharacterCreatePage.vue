@@ -4,6 +4,7 @@ import CharacterForm from '@/components/CharacterForm.vue';
 import { ref } from 'vue';
 
 const formData = ref({
+  age: '',
   characterName: '',
   characterDescription: '',
   preferredCharacterGender: '',
@@ -27,7 +28,9 @@ const handleSubmit = (data: typeof formData.value) => {
 <template>
   <Layout :has-sidebar="false" content-class="w-full">
     <template #content>
-      <h1 class="text-3xl font-bold mb-2">Описание персонажа</h1>
+      <h1 class="text-3xl font-bold mb-2">
+        Описание персонажа
+      </h1>
       <CharacterForm v-model="formData" @submit="handleSubmit" />
     </template>
   </Layout>

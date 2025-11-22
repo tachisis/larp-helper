@@ -75,7 +75,7 @@ export const CHARACTER_TRIGGERS = [
 export const CHARACTER_RACES = [
   'люди',
   'вуки',
-  "тви'леки",
+  'тви\'леки',
   'мандалорцы',
   'забраки',
   'каминоанцы',

@@ -56,8 +56,12 @@ const handleFileInputChange = (event: Event) => {
 
 <template>
   <div class="flex flex-col items-center gap-2 p-6">
-    <h3 class="text-lg font-heading font-semibold" v-if="title">{{ title }}</h3>
-    <p class="text-xs mb-4" v-if="description">{{ description }}</p>
+    <h3 v-if="title" class="text-lg font-heading font-semibold">
+      {{ title }}
+    </h3>
+    <p v-if="description" class="text-xs mb-4">
+      {{ description }}
+    </p>
 
     <div
       class="flex flex-col items-center gap-4 p-6 border-2 border-dashed rounded-lg transition-colors w-full max-w-md"
@@ -80,7 +84,12 @@ const handleFileInputChange = (event: Event) => {
           class="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md cursor-pointer hover:bg-primary/90 transition-colors"
         >
           Выберите файл
-          <Input type="file" @change="handleFileInputChange" :accept="accept" class="hidden" />
+          <Input
+            type="file"
+            :accept="accept"
+            class="hidden"
+            @change="handleFileInputChange"
+          />
         </label>
       </div>
     </div>

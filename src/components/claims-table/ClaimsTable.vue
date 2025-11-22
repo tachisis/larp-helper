@@ -43,5 +43,5 @@ const columns = computed((): ColumnDef<ProcessedRow, any>[] =>
 </script>
 
 <template>
-  <DataTable :columns="columns" :data="props.data" :column-filters="columnFilters" />
+  <DataTable :columns="columns" :data="props.data" :filter-configs="columnFilters" />
 </template>

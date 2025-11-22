@@ -41,7 +41,7 @@ const handleFileChange = (event: Event) => {
   <Layout>
     <template #sidebar>
       <FileUploader
-        :handleFileChange="handleFileChange"
+        :handle-file-change="handleFileChange"
         :accept="'.xlsx'"
         class="border"
         title="Загрузите файл с заявками"
@@ -51,9 +51,11 @@ const handleFileChange = (event: Event) => {
     </template>
 
     <template #content>
-      <ClaimsTable :data="data" :column-visibility="columnVisibility" v-if="data.length > 0" />
+      <ClaimsTable v-if="data.length > 0" :data="data" :column-visibility="columnVisibility" />
       <div v-else class="flex items-center justify-center h-64 text-muted-foreground">
-        <p class="text-center">Загрузите Excel файл для отображения результатов</p>
+        <p class="text-center">
+          Загрузите Excel файл для отображения результатов
+        </p>
       </div>
     </template>
   </Layout>
